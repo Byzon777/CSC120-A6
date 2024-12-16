@@ -25,11 +25,10 @@ public class Library extends Building {
      * @param title The title of the book to add.
      */
     public void addTitle(String title) {
-        if (!collection.containsKey(title)) {
-            collection.put(title, true);
-        } else {
-            System.out.println("The title is already in the collection.");
+        if (collection.containsKey(title)) {
+            throw new RuntimeException("The title is already in the collection.");
         }
+        collection.put(title, true);
     }
 
     /**
@@ -39,10 +38,11 @@ public class Library extends Building {
      * @return The title of the book removed, or null if the book was not found.
      */
     public String removeTitle(String title) {
-        if (collection.remove(title) != null) {
-            return title;
+        if (!collection.containsKey(title)) {
+            throw new IllegalArgumentException("Book titled '" + title + "' is not in the collection.");
         }
-        return null;
+        collection.remove(title);
+        return title;
     }
 
     /**
@@ -51,15 +51,14 @@ public class Library extends Building {
      * @param title The title of the book to check out.
      */
     public void checkOut(String title) {
-        if (collection.containsKey(title)) {
-            if (collection.get(title)) {
-                collection.put(title, false);
-            } else {
-                System.out.println("The book is already checked out.");
-            }
-        } else {
-            System.out.println("The book is not in the collection.");
+        if (!collection.containsKey(title)) {
+            throw new IllegalArgumentException("Book titled '" + title + "' is not in the collection.");
         }
+        if (!collection.get(title)) {
+            throw new IllegalArgumentException("The book is already checked out.");
+        }
+        collection.put(title, false);
+        System.out.println("You successfully checked out book.");
     }
 
     /**
@@ -68,15 +67,15 @@ public class Library extends Building {
      * @param title The title of the book to return.
      */
     public void returnBook(String title) {
-        if (collection.containsKey(title)) {
-            if (!collection.get(title)) {
-                collection.put(title, true);
-            } else {
-                System.out.println("The book is already returned.");
-            }
-        } else {
-            System.out.println("The book is not in the collection.");
+        if (!collection.containsKey(title)) {
+            throw new IllegalArgumentException("Book titled '" + title + "' is not in the collection.");
         }
+        if (collection.get(title)) {
+            throw new IllegalArgumentException("The book is already returned.");
+        }
+        collection.put(title, true);
+        System.out.println("You successfully returned book.");
+
     }
 
     /**

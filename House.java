@@ -45,13 +45,11 @@ public class House extends Building {
      * @param name The name of the resident to add.
      * @return true if the resident is successfully added, false if they already live there.
      */
-    public boolean moveIn(String name) {
+    public void moveIn(String name) {
         if (this.residents.contains(name)) {
-            System.out.println(name + " already lives here.");
-            return false;
+            throw new IllegalArgumentException("Resident " + name + " already lives here.");
         }
         this.residents.add(name);
-        return true;
     }
 
     /**
@@ -61,10 +59,11 @@ public class House extends Building {
      * @return The name of the resident removed, or null if the resident was not found.
      */
     public String moveOut(String name) {
-        if (this.residents.remove(name)) {
-            return name;
+        if (!this.residents.contains(name)) {
+            throw new IllegalArgumentException("Resident " + name + " not found in the house.");
         }
-        return null;
+        this.residents.remove(name);
+        return name;
     }
 
     /**
